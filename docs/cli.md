@@ -27,6 +27,20 @@ $ livereload --port 5500 --base-path /proxy/5500
 The proxy must strip the prefix before forwarding requests (code-server's
 `/proxy/` does, `/absproxy/` does not), and must forward websockets.
 
+Alternatively, pass `--proxy` to detect the base path from the environment.
+Currently this reads code-server's `VSCODE_PROXY_URI`, replacing `{{port}}`
+with the port being served:
+
+| `VSCODE_PROXY_URI`              | Base path     |
+| ------------------------------- | ------------- |
+| `https://host/proxy/{{port}}/`  | `/proxy/5500` |
+| `./proxy/{{port}}`              | `/proxy/5500` |
+| `https://{{port}}.host`         | none          |
+
+A relative value is taken as relative to the root, so this won't work if
+code-server itself is served under a prefix; use `--base-path` for that.
+If `--base-path` is also given, it takes precedence.
+
 [code-server]: https://coder.com/docs/code-server/guide#accessing-web-services
 
 ```{versionchanged} 2.0.0
